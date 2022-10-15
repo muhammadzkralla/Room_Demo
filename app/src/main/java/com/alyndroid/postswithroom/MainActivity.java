@@ -1,9 +1,12 @@
 package com.alyndroid.postswithroom;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,23 +21,25 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MAINACTIVITY";
     private RecyclerView postsRecyclerView;
-    private Button insertBtn, getBtn;
     private EditText titleEt, bodyEt;
+    PostsAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        insertBtn = findViewById(R.id.insertButton);
-        getBtn = findViewById(R.id.getButton);
+        Button insertBtn = findViewById(R.id.insertButton);
+        Button getBtn = findViewById(R.id.getButton);
 
         titleEt = findViewById(R.id.editTexttitle);
         bodyEt = findViewById(R.id.editTextBody);
 
         postsRecyclerView = findViewById(R.id.posts_recyclerView);
-        final PostsAdapter adapter = new PostsAdapter();
-        postsRecyclerView.setAdapter(adapter);
+        postsRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        postsRecyclerView.setLayoutManager(linearLayoutManager);
 
         final PostsDatabase postsDatabase = PostsDatabase.getInstance(this);
 
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(Throwable e) {
-
+                                Log.d(TAG, "onError: " + e);
                             }
                         });
             }
@@ -77,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onSuccess(List<Post> posts) {
-                                adapter.setList(posts);
-                                adapter.notifyDataSetChanged();
+                                adapter = new PostsAdapter(MainActivity.this, posts);
+                                postsRecyclerView.setAdapter(adapter);
                             }
 
                             @Override
                             public void onError(Throwable e) {
-
+                                Log.d(TAG, "onError: " + e);
                             }
                         });
             }

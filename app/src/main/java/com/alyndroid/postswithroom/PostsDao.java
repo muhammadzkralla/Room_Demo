@@ -13,9 +13,11 @@ import io.reactivex.Single;
 
 @Dao
 interface PostsDao {
+    // Observable of type Completable
     @Insert
     Completable insertPost(Post post);
 
+    // Observable of type Single
     @Query("select * from posts_table")
     Single<List<Post>> getPosts();
 }
