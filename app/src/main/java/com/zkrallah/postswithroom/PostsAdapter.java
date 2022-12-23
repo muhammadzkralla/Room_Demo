@@ -1,5 +1,6 @@
-package com.alyndroid.postswithroom;
+package com.zkrallah.postswithroom;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +37,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final PostsViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final PostsViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final Post post = postsList.get(position);
 
         holder.titleTV.setText(post.getTitle());
@@ -57,6 +59,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
                             @Override
                             public void onComplete() {
                                 Log.d("TAG", "onComplete: ");
+                                postsList.remove(post);
+                                notifyItemRemoved(position);
                             }
 
                             @Override
@@ -64,6 +68,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
 
                             }
                         });
+
+                Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -75,8 +81,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
     }
 
 
-    public class PostsViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleTV, bodyTV;
+    public static class PostsViewHolder extends RecyclerView.ViewHolder {
+        private final TextView titleTV;
+        private final TextView bodyTV;
         Button button;
         public PostsViewHolder(@NonNull View itemView) {
             super(itemView);

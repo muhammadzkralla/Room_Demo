@@ -1,4 +1,4 @@
-package com.alyndroid.postswithroom;
+package com.zkrallah.postswithroom;
 
 import org.junit.Test;
 

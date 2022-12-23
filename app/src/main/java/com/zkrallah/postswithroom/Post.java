@@ -1,16 +1,15 @@
-package com.alyndroid.postswithroom;
+package com.zkrallah.postswithroom;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "posts_table")
 class Post {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private int userId;
-    private String title;
-    private String body;
+    private final int userId;
+    private final String title;
+    private final String body;
 
     public Post(int userId, String title, String body) {
         this.userId = userId;
